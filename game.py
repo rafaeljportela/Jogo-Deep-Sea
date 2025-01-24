@@ -61,7 +61,7 @@ def iniciar_jogo():
     barra_diminui = 3  # Velocidade de diminuição da barra por segundo
 
     inicio_fase = time.time()
-    duracao_fase1 = 90  # 1 minuto e 30 segundos
+    duracao_fase1 = 60  # 1 minuto e 30 segundos
 
     super_tiro = False
     super_tiro_usado = False
@@ -92,23 +92,123 @@ def iniciar_jogo():
                 ultima_moeda = time.time()
 
             if tempo_restante <= 0:
-                if moedas > 10:
+                if moedas > 6:
                     super_tiro = True
 
                 mensagem_fase = True
 
-        elif fase == 2:
-            if moedas == 0 and all(obstaculo.x + obstaculo.width < 0 for _, obstaculo in obstaculos_ativos):
-                fase2_concluida = True
 
-            if fase2_concluida:
-                fundo_estatico.draw()
-                fundo_dinamico1.draw()
-                fundo_dinamico2.draw()
-                janela.draw_text("Parabéns! Você concluiu o jogo!", janela.width // 2 - 200, janela.height // 2 - 50, size=32, color=(255, 255, 255))
-                janela.update()
-                time.sleep(3)
-                jogo_ativo = False
+
+
+        elif fase == 2:
+
+            if mensagem_fase:
+                # Função para reiniciar o cenário ao entrar na fase 2
+
+                def reiniciar_fase_2():
+                    nonlocal fundo_dinamico1, fundo_dinamico2, obstaculos_ativos, submarino
+
+                    # Resetar o fundo dinâmico
+
+                    fundo_dinamico1.set_position(0, 0)
+
+                    fundo_dinamico2.set_position(fundo_dinamico1.width, 0)
+
+                    # Limpar todos os obstáculos da fase anterior
+
+                    obstaculos_ativos = []
+
+                    # Reposicionar o submarino na posição inicial
+
+                    submarino.set_position(100, janela.height // 2 - submarino.height // 2)
+
+                reiniciar_fase_2()
+
+                mensagem_fase = False
+
+            tempo_restante = duracao_fase1 - (time.time() - inicio_fase)
+
+            if tempo_restante <= 0:
+
+                if all(obstaculo.x + obstaculo.width < 0 for _, obstaculo in obstaculos_ativos):
+
+                    # O jogador venceu a fase 2
+
+                    fundo_estatico.draw()
+
+                    fundo_dinamico1.draw()
+
+                    fundo_dinamico2.draw()
+
+                    janela.draw_text("Parabéns! Você venceu a Fase 2!", janela.width // 2 - 200,
+                                     janela.height // 2 - 50, size=32, color=(255, 255, 255))
+
+                    janela.update()
+
+                    time.sleep(3)
+
+                    jogo_ativo = False
+
+                else:
+
+                    # O jogador perdeu a fase 2
+
+                    fundo_estatico.draw()
+
+                    fundo_dinamico1.draw()
+
+                    fundo_dinamico2.draw()
+
+                    janela.draw_text("Você perdeu! Não eliminou todos os obstáculos a tempo.", janela.width // 2 - 300,
+                                     janela.height // 2 - 50, size=32, color=(255, 255, 255))
+
+                    janela.update()
+
+                    time.sleep(3)
+
+                    jogo_ativo = False
+
+            tempo_restante = duracao_fase1 - (time.time() - inicio_fase)
+
+            if tempo_restante <= 0:
+
+                if all(obstaculo.x + obstaculo.width < 0 for _, obstaculo in obstaculos_ativos):
+
+                    # O jogador venceu a fase 2
+
+                    fundo_estatico.draw()
+
+                    fundo_dinamico1.draw()
+
+                    fundo_dinamico2.draw()
+
+                    janela.draw_text("Parabéns! Você venceu a Fase 2!", janela.width // 2 - 200,
+                                     janela.height // 2 - 50, size=32, color=(255, 255, 255))
+
+                    janela.update()
+
+                    time.sleep(3)
+
+                    jogo_ativo = False
+
+                else:
+
+                    # O jogador perdeu a fase 2
+
+                    fundo_estatico.draw()
+
+                    fundo_dinamico1.draw()
+
+                    fundo_dinamico2.draw()
+
+                    janela.draw_text("Você perdeu! Não eliminou todos os obstáculos a tempo.", janela.width // 2 - 300,
+                                     janela.height // 2 - 50, size=32, color=(255, 255, 255))
+
+                    janela.update()
+
+                    time.sleep(3)
+
+                    jogo_ativo = False
 
         if mensagem_fase:
             fundo_estatico.draw()
